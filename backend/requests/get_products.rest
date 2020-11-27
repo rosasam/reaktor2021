@@ -1,4 +1,5 @@
 GET https://bad-api-assignment.reaktor.com/products/shirts
+x-force-error-mode: all
 
 ####
 
