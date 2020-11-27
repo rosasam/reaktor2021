@@ -1,0 +1,10 @@
+GET https://bad-api-assignment.reaktor.com/products/shirts
+
+####
+
+GET https://bad-api-assignment.reaktor.com/products/jackets
+
+###
+
+GET https://bad-api-assignment.reaktor.com/products/accessories
+
