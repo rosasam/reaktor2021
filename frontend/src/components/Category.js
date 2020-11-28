@@ -13,7 +13,7 @@ const Category = ({ name, products }) => (
             <span className="category-header">Colors</span>
             <span className="category-header">Manufacturer</span>
             <span className="category-header">Availability</span>
-            {products.slice(0, 100).map((product) => (
+            {products.map((product) => (
               <Fragment key={product.id}>
                 <span>{product.name}</span>
                 <span>
