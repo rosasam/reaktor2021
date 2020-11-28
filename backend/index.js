@@ -1,9 +1,11 @@
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 const cache = require('./cache')
 const config = require('./utils/config')
 const productsRouter = require('./controllers/products')
 const badApi = require('./badApi')
+
 
 const app = express()
 
@@ -12,7 +14,7 @@ badApi.getAll().then((data) => {
   cache.set('products', data)
 })
 
-
+app.use(cors())
 // Parse incoming requests with JSON payloads
 app.use(express.json())
 // Routers
