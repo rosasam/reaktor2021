@@ -81,7 +81,7 @@ const getCategories = async (categories) => {
     ...product,
     availability: allAvailabilities[product.id]
   }))
-  return _(products).groupBy('type')
+  return _.groupBy(products, 'type')
 }
 
 const getAll = async () => {

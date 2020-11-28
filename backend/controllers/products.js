@@ -4,7 +4,11 @@ const badApi = require('../badApi')
 const config = require('../utils/config')
 
 productsRouter.get('/', async (request, response) => {
-  response.status(200).json(cache.get('products'))
+  const data = cache.get('products')
+  if (data === undefined) {
+    return response.status(500).json({ error: 'Loading data, try again later' }) 
+  }
+  response.status(200).json(data)
 })
 
 productsRouter.get('/:category', async (request, response) => {
@@ -12,8 +16,11 @@ productsRouter.get('/:category', async (request, response) => {
   if (!config.productCategories.includes(category)) {
     return response.status(404).json({ error: 'Category does not exist' })
   }
-  const data = cache.get('products')[category]
-  response.status(200).json(data)
+  const data = cache.get('products')
+  if (data === undefined) {
+    return response.status(500).json({ error: 'Loading data, try again later' }) 
+  }
+  response.status(200).json(data.data[category])
 })
 
 productsRouter.post('/', async (request, response) => {
