@@ -1,5 +1,6 @@
 const axios = require('axios')
 const config = require('./utils/config')
+const _ = require('lodash')
 
 const callBadApi = async (endpoint) => {
   try {
@@ -43,12 +44,17 @@ const getAvailabilities = async (manufacturer) => {
   return data.response
 }
 
-const getAll = async () => {
+/* 
+Fetch products and availabilities from one or more category
+Fetching multiple categories in one go is more efficient, as it leads to less
+calls to the availability endpoint.
+*/
+const getCategories = async (categories) => {
   let products = []
   const manufacturers = new Set()
 
   // Fetch products
-  for (category of config.productCategories) {
+  for (category of categories) {
     const data = await getProducts(category)
     data.forEach(product => {
       manufacturers.add(product.manufacturer)
@@ -70,16 +76,21 @@ const getAll = async () => {
     })
   }
 
-  // Assign availability info to products
+  // Assign availability info to products and group by category
   products = products.map(product => ({
     ...product,
     availability: allAvailabilities[product.id]
   }))
-  return products
+  return _(products).groupBy('type')
+}
+
+const getAll = async () => {
+  return await getCategories(config.productCategories)
 }
 
 module.exports = {
   getProducts,
   getAvailabilities,
+  getCategories,
   getAll,
 }

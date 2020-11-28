@@ -1,3 +1,5 @@
+const config = require('./utils/config')
+
 const cache = {test: 'foo'}
 
 const set = (key, data) => {
