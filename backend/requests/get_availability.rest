@@ -1,1 +1,6 @@
 GET https://bad-api-assignment.reaktor.com/availability/reps
+
+###
+
+GET https://bad-api-assignment.reaktor.com/availability/reps
+x-force-error-mode: all

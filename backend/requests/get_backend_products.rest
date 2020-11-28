@@ -1,1 +1,5 @@
 GET http://localhost:6006/products
+
+###
+
+POST http://localhost:6006/products

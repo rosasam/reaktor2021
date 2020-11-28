@@ -3,8 +3,15 @@ const express = require('express')
 const cache = require('./cache')
 const config = require('./utils/config')
 const productsRouter = require('./controllers/products')
+const badApi = require('./badApi')
 
 const app = express()
+
+// Initial fetch of data when server starts
+badApi.getAll().then((data) => {
+  cache.set('products', data)
+})
+
 
 // Parse incoming requests with JSON payloads
 app.use(express.json())
@@ -13,4 +20,10 @@ app.use('/products', productsRouter)
 
 app.listen(config.PORT, () => {
   console.log(`Server running on port ${config.PORT}`)
+  setInterval(() => {
+    console.log('Updating data')
+    badApi.getAll().then((data) => {
+      cache.set('products', data)
+    }) 
+  }, config.updateInterval);
 })

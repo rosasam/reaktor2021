@@ -1,5 +1,15 @@
 const cache = {test: 'foo'}
 
+const set = (key, data) => {
+  cache[key] = {
+    data,
+    timestamp: Date.now()
+  }
+}
+
+const get = (key) => cache[key]
+
 module.exports = {
-  cache,
+  set,
+  get,
 }

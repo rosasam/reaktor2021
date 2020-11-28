@@ -4,11 +4,11 @@ const config = require('./utils/config')
 const callBadApi = async (endpoint) => {
   try {
     // TODO handle 404:s for manufacturers that don't exist
-    const response = await axios.get(`${config.badApiUrl}${endpoint}`)
-    const data = JSON.parse(response.data)
-    if (data.length === 0) {
-      console.log('No data received')
-    }
+    const url =`${config.badApiUrl}${endpoint}`
+    console.log('calling ', url)
+    const conf = {headers: {'x-force-error-mode': 'all'}}
+    const response = await axios.get(url)
+    const data = response.data
     return data
   } catch (error) {
     console.log(error)
@@ -22,52 +22,64 @@ const getProducts = async (category) => {
     console.log('Unknown product category')
     return []
   }
-  const data = await callBadApi(category)
+  const data = await callBadApi(`products/${category}`)
   return data
 }
 
 const getAvailabilities = async (manufacturer) => {
-  const data = await callBadApi(manufacturer)
+  let data = await callBadApi(`availability/${manufacturer}`)
+  // Sometimes, no data is returned :)
+  const max_retries = 3
+  let retries = 0
+
+  while (!Array.isArray(data.response)) {
+    if (retries >= max_retries) {
+      return []
+    }
+    console.log(`No data received, trying again (try ${retries+1}/${max_retries})`)
+    data = await callBadApi(`availability/${manufacturer}`)
+    retries++
+  }
   return data.response
 }
 
 const getAll = async () => {
-  const products = {}
+  let products = []
   const manufacturers = new Set()
 
-  // Get all products
-  config.productCategories.forEach(category => {
-    const items = getProducts(category)
-    const itemsObj = {}
-    // Save (unique) names of all manufacturers
-    items.forEach(item => {
-      manufacturers.add(manufacturer)
-      itemsObj[item.id] = item
+  // Fetch products
+  for (category of config.productCategories) {
+    const data = await getProducts(category)
+    data.forEach(product => {
+      manufacturers.add(product.manufacturer)
     })
-    products[category] = itemsObj
-  })
+    products = products.concat(data)
+  }
 
-  // Get product availabilities from all manufacturers that were listed in products
-  let availabilities = manufacturers
-    .flatMap(manufacturer => (
-      getAvailabilities(manufacturer)
-    ))
-    // Parse availability data to match the format of products
-    .map(availability => {
+  // Fetch availabilities based on found manufacturers
+  // Assign them to an object with the product id as key
+  let allAvailabilities = {}
+  for (manufacturer of [...manufacturers]) {
+    const availabilities = await getAvailabilities(manufacturer)
+    availabilities.forEach(availability => {
       // TODO: Better parsing...
       // "Parses" XML and extracts the "INSTOCKVALUE" value.
       // Assumes that the XML structure never changes.
       const status = availability.DATAPAYLOAD.split('>').flatMap(line => line.split('<'))[4]
-      return {
-        id: availability.id.toLowerCase,
-        availability: status
-      }
+      allAvailabilities[availability.id.toLowerCase()] = status
     })
+  }
+
+  // Assign availability info to products
+  products = products.map(product => ({
+    ...product,
+    availability: allAvailabilities[product.id]
+  }))
+  return products
 }
 
-module.export = {
+module.exports = {
   getProducts,
   getAvailabilities,
+  getAll,
 }
-
- // "derp", "abiplos", "nouke", "reps"
