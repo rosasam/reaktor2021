@@ -6,7 +6,10 @@
   "author": "Samuel Rosas",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build:front": "rm -rf build && cd ../frontend && yarn build && cp -r build ../backend",
+    "deploy": "yarn build:front && cd .. && git add . && git commit -m build && git subtree push --prefix backend/ heroku-frontend master",
+    "logs:prod": "heroku logs -a rocky-citadel-65023 --tail"
   },
   "dependencies": {
     "axios": "^0.21.0",
