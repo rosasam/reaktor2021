@@ -6,7 +6,6 @@ const config = require('./utils/config')
 const productsRouter = require('./controllers/products')
 const badApi = require('./badApi')
 
-
 const app = express()
 
 // Initial fetch of data when server starts
@@ -15,6 +14,7 @@ badApi.getAll().then((data) => {
 })
 
 app.use(cors())
+app.use(express.static('build'))
 // Parse incoming requests with JSON payloads
 app.use(express.json())
 // Routers

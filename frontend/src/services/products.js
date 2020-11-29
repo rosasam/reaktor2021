@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseUrl = 'https://enigmatic-everglades-58958.herokuapp.com/products/'
+const baseUrl = '/products/'
 
 const getProductsByCategory = async (category) => {
   const categories = ['shirts', 'jackets', 'accessories']
