@@ -1,6 +1,6 @@
 const config = require('./utils/config')
 
-const cache = {test: 'foo'}
+const cache = {}
 
 const set = (key, data) => {
   cache[key] = {

@@ -8,14 +8,10 @@ import {
 import './App.css'
 import Category from './components/Category'
 import Header from './components/Header'
+import Home from './components/Home'
 import productService from './services/products'
 
 const App = () => {
-  const Home = () => (
-    <div className="category">
-      <h2>Home</h2>
-    </div>
-  )
   const [products, setProducts] = useState({})
   const [updateTimeStamp, setTimestamp] = useState(undefined)
 
@@ -42,7 +38,7 @@ const App = () => {
           buttonHandler={handleGetData}
         />
         <nav className="nav">
-          <div style={{ position: 'fixed' }}>
+          <div>
             <div>
               <Link to="/">Home</Link>
             </div>
@@ -61,13 +57,13 @@ const App = () => {
             renders the first one that matches the current URL. */}
         <Switch>
           <Route path="/jackets">
-            <Category name="Jackets" products={products.jackets} />
+            <Category key="jackets" name="Jackets" products={products.jackets} initialVisibleItems={50} />
           </Route>
           <Route path="/shirts">
-            <Category name="Shirts" products={products.shirts} />
+            <Category key="shirts" name="Shirts" products={products.shirts} initialVisibleItems={50} />
           </Route>
           <Route path="/accessories">
-            <Category name="Accessories" products={products.accessories} />
+            <Category key="accessories" name="Accessories" products={products.accessories} initialVisibleItems={50} />
           </Route>
           <Route path="/">
             <Home />

@@ -5,7 +5,7 @@ const badApiUrl = 'https://bad-api-assignment.reaktor.com/'
 // Available product categories in BadApi
 const productCategories = ['shirts', 'jackets', 'accessories']
 // Update interval for fetching info from BadApi (1 hour)
-const updateInterval = 6000000
+const updateInterval = 3600000
 
 module.exports = {
   PORT,

@@ -5,7 +5,7 @@ const Header = ({ timestamp, buttonHandler }) => {
 
   const formatTimestamp = (oldTime, newTime) => {
     const date = new Date(oldTime)
-    const timeDelta = (newTime - oldTime) / 1000
+    const timeDelta = Math.max((newTime - oldTime) / 1000, 0)
     const minutes = Math.floor(timeDelta / 60)
     return `Data last updated: ${date.toUTCString()} (${minutes} minute${minutes === 1 ? '' : 's'} ago)`
   }
@@ -20,9 +20,7 @@ const Header = ({ timestamp, buttonHandler }) => {
   return (
     <div className="header">
       <div>
-        {formatTimestamp(timestamp, time)}
-      </div>
-      <div>
+        {timestamp ? formatTimestamp(timestamp, time) : ''}
         <button type="submit" onClick={buttonHandler}>
           Update
         </button>
