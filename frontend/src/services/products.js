@@ -6,7 +6,6 @@ const getProductsByCategory = async (category) => {
   const categories = ['shirts', 'jackets', 'accessories']
   if (!categories.includes(category)) {
     // error handling
-    console.log('Unknown product category')
     return undefined
   }
   const response = await axios.get(`${baseUrl}${category}`)

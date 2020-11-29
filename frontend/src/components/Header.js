@@ -5,9 +5,8 @@ const Header = ({ timestamp, buttonHandler }) => {
 
   const formatTimestamp = (oldTime, newTime) => {
     const date = new Date(oldTime)
-    let timeDelta = (newTime - oldTime) / 1000
+    const timeDelta = (newTime - oldTime) / 1000
     const minutes = Math.floor(timeDelta / 60)
-    timeDelta -= minutes * 60
     return `Data last updated: ${date.toUTCString()} (${minutes} minute${minutes === 1 ? '' : 's'} ago)`
   }
 
