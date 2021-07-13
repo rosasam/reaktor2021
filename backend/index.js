@@ -21,11 +21,6 @@ app.use(express.json())
 // Routers
 app.use('/products', productsRouter)
 
-app.get('/*', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-})
-
-
 app.listen(config.PORT, () => {
   console.log(`Server running on port ${config.PORT}`)
   setInterval(() => {

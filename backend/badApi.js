@@ -4,10 +4,8 @@ const _ = require('lodash')
 
 const callBadApi = async (endpoint) => {
   try {
-    // TODO handle 404:s for manufacturers that don't exist
     const url =`${config.badApiUrl}${endpoint}`
     console.log('calling ', url)
-    const conf = {headers: {'x-force-error-mode': 'all'}}
     const response = await axios.get(url)
     const data = response.data
     return data
